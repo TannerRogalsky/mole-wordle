@@ -89,4 +89,44 @@ export const getWordOfDay = () => {
   }
 }
 
+const MOLES = [
+  'J',
+  'X',
+  'D',
+  'H',
+  'Q',
+  'E',
+  'Y',
+  'T',
+  'V',
+  'K',
+  'N',
+  'A',
+  'F',
+  'R',
+  'G',
+  'I',
+  'U',
+  'Z',
+  'M',
+  'P',
+  'L',
+  'O',
+  'W',
+  'B',
+  'S',
+  'C',
+]
+
+export const getMoleOfDay = () => {
+  // January 1, 2022 Game Epoch
+  const epochMs = new Date(2022, 0).valueOf()
+  const now = Date.now()
+  const msInDay = 86400000
+  const index = Math.floor((now - epochMs) / msInDay)
+
+  return MOLES[index % MOLES.length]
+}
+
+export const mole = getMoleOfDay()
 export const { solution, solutionIndex, tomorrow } = getWordOfDay()

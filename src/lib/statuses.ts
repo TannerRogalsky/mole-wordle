@@ -1,4 +1,4 @@
-import { solution, unicodeSplit } from './words'
+import { solution, unicodeSplit, mole } from './words'
 
 export type CharStatus = 'absent' | 'present' | 'correct'
 
@@ -49,6 +49,11 @@ export const getGuessStatuses = (guess: string): CharStatus[] => {
 
   splitGuess.forEach((letter, i) => {
     if (statuses[i]) return
+
+    if (letter === mole) {
+      statuses[i] = 'present'
+      return
+    }
 
     if (!splitSolution.includes(letter)) {
       // handles the absent case
