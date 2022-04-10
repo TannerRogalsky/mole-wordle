@@ -10,6 +10,10 @@ export const getStatuses = (
 
   guesses.forEach((word) => {
     unicodeSplit(word).forEach((letter, i) => {
+      if (letter === mole) {
+        return (charObj[letter] = 'present')
+      }
+
       if (!splitSolution.includes(letter)) {
         // make status absent
         return (charObj[letter] = 'absent')
