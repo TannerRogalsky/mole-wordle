@@ -3,6 +3,7 @@ import { VALID_GUESSES } from '../constants/validGuesses'
 import { WRONG_SPOT_MESSAGE, NOT_CONTAINED_MESSAGE } from '../constants/strings'
 import { getGuessStatuses } from './statuses'
 import { default as GraphemeSplitter } from 'grapheme-splitter'
+import { getIndexOffset } from './localStorage'
 
 export const isWordInWordList = (word: string) => {
   return (
@@ -74,18 +75,23 @@ export const localeAwareUpperCase = (text: string) => {
     : text.toUpperCase()
 }
 
-export const getWordOfDay = () => {
-  // January 1, 2022 Game Epoch
-  const epochMs = new Date(2022, 0).valueOf()
+// January 1, 2022 Game Epoch
+const epochMs = new Date(2022, 0).valueOf()
+const msInDay = 86400000
+const getIndex = () => {
   const now = Date.now()
-  const msInDay = 86400000
-  const index = Math.floor((now - epochMs) / msInDay)
-  const nextday = (index + 1) * msInDay + epochMs
+  return Math.floor((now - epochMs) / msInDay) + getIndexOffset()
+}
 
+const getTomorrow = () => {
+  return (getIndex() + 1) * msInDay + epochMs
+}
+
+export const getWordOfDay = () => {
+  const index = getIndex()
   return {
     solution: localeAwareUpperCase(WORDS[index % WORDS.length]),
     solutionIndex: index,
-    tomorrow: nextday,
   }
 }
 
@@ -118,15 +124,19 @@ const MOLES = [
   'C',
 ]
 
-export const getMoleOfDay = () => {
-  // January 1, 2022 Game Epoch
-  const epochMs = new Date(2022, 0).valueOf()
-  const now = Date.now()
-  const msInDay = 86400000
-  const index = Math.floor((now - epochMs) / msInDay)
+export const { solution, solutionIndex } = getWordOfDay()
+export const tomorrow = getTomorrow()
 
-  return MOLES[index % MOLES.length]
+export const getMoleOfDay = () => {
+  let index = getIndex()
+  const splitSolution = unicodeSplit(solution)
+  let mole = MOLES[index % MOLES.length]
+  while (splitSolution.includes(mole)) {
+    index += 1
+    mole = MOLES[index % MOLES.length]
+  }
+  return mole
 }
 
 export const mole = getMoleOfDay()
-export const { solution, solutionIndex, tomorrow } = getWordOfDay()
+console.log(mole)

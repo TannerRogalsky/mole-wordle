@@ -1,5 +1,6 @@
 const gameStateKey = 'gameState'
 const highContrastKey = 'highContrast'
+const indexOffsetKey = 'indexOffset'
 
 type StoredGameState = {
   guesses: string[]
@@ -46,4 +47,17 @@ export const setStoredIsHighContrastMode = (isHighContrast: boolean) => {
 export const getStoredIsHighContrastMode = () => {
   const highContrast = localStorage.getItem(highContrastKey)
   return highContrast === '1'
+}
+
+export const getIndexOffset = () => {
+  const item = localStorage.getItem(indexOffsetKey) || '0'
+  return Number.parseInt(item)
+}
+
+export const setIndexOffset = (offset: number) => {
+  localStorage.setItem(indexOffsetKey, offset.toString())
+}
+
+export const incrementIndexOffset = () => {
+  setIndexOffset(getIndexOffset() + 1)
 }
