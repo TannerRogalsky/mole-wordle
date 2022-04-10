@@ -139,4 +139,3 @@ export const getMoleOfDay = () => {
 }
 
 export const mole = getMoleOfDay()
-console.log(mole)
